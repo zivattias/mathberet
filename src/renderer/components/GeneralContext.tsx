@@ -276,9 +276,10 @@ function GeneralContextProvider({ children }: PropsWithChildren) {
 
   useEffect(() => {
     window.api.getOS();
-
+    
     window.api.receive('gotOS', (data: string) => {
       setCurrentOS(data);
+      console.log(currentOS);
     });
   }, []);
 

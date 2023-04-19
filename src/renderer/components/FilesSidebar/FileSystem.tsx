@@ -34,7 +34,7 @@ declare global {
 }
 function FileSystem() {
   const { t, i18n } = useTranslation();
-  const { setSelectedFile } = useGeneralContext();
+  const { setSelectedFile, currentOS } = useGeneralContext();
 
   const [errorModalContent, setErrorModalContent] = useState('');
   const [errorModalOpen, setErrorModalOpen] = useState(false);
@@ -83,33 +83,33 @@ function FileSystem() {
       }
       if (dest) {
         for (const item of items[dest].children) {
-          if (getFileNameFromPath(item as string) === draggedItem.data) {
+          if (getFileNameFromPath(item as string, currentOS) === draggedItem.data) {
             setErrorModalContent(t('Modal 5'));
             setErrorModalOpen(true);
             return prev;
           }
         }
       }
-      return updateItemsPosition(prev, draggedItem, target);
+      return updateItemsPosition(prev, draggedItem, target, currentOS);
     });
   };
 
   const addFolder = () => {
-    if (itemExistsInParent(newFolderName, selectedDirectory, items, true)) {
+    if (itemExistsInParent(newFolderName, selectedDirectory, items, true, currentOS)) {
       setErrorModalContent(t('Modal 3'));
       setErrorModalOpen(true);
       return;
     }
-    setItems((prev) => generateStateWithNewFolder(prev, selectedDirectory));
+    setItems((prev) => generateStateWithNewFolder(prev, selectedDirectory, currentOS));
   };
 
   const addFile = () => {
-    if (itemExistsInParent(newFileName, selectedDirectory, items, false)) {
+    if (itemExistsInParent(newFileName, selectedDirectory, items, false, currentOS)) {
       setErrorModalContent(t('Modal 2'));
       setErrorModalOpen(true);
       return;
     }
-    setItems((prev) => generateStateWithNewFile(prev, selectedDirectory));
+    setItems((prev) => generateStateWithNewFile(prev, selectedDirectory, currentOS));
   };
 
   const handleRenameItem = (item: MathTreeItem, name: string): void => {
